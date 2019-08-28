@@ -1,25 +1,23 @@
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
 const state = {
-  game: null
+  shop: []
 }
 
 const mutations = {
-  GAME_SET(state, game) {
-    state.game = game
-  },
-  STATS_UPDATE(state, stats){
-    Object.assign(state.game, stats)
+  SHOP_SET(state, shop) {
+    state.shop = shop
   }
 }
 const actions = {
-  initGame: async ({ commit, dispatch }) => {
+  fetchShop: async ({ getters, commit, dispatch }) => {
     try {
-      const response = await RepositoryFactory.get('game').startGame()
+      const game = getters.game
+      const response = await RepositoryFactory.get('shop').fetchShop(
+        game.gameId
+      )
       if (response.status === 200 && response.data) {
-        commit('GAME_SET', response.data)
-        dispatch('fetchTasks')
-        dispatch('fetchShop')
+        commit('SHOP_SET', response.data)
       } else {
         throw 'API call unsuccessful.'
       }
@@ -29,8 +27,8 @@ const actions = {
   }
 }
 const getters = {
-  game: state => {
-    return state.game
+  shop: state => {
+    return state.shop
   }
 }
 export default {

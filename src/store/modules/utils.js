@@ -16,7 +16,7 @@ const actions = {
     commit('ADD_MSG', messageObj),
       setTimeout(() => {
         commit('REMOVE_MSG')
-      }, 3000)
+      }, 5000)
   }
 }
 export default {
