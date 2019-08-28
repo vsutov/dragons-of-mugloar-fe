@@ -1,15 +1,21 @@
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
 const state = {
-  game: null
+  game: null,
+  over: false
 }
 
 const mutations = {
   GAME_SET(state, game) {
     state.game = game
+    state.over = false
   },
-  STATS_UPDATE(state, stats){
+  STATS_UPDATE(state, stats) {
     Object.assign(state.game, stats)
+  },
+  GAME_OVER(state) {
+    state.game = null
+    state.over = true
   }
 }
 const actions = {
@@ -31,6 +37,13 @@ const actions = {
 const getters = {
   game: state => {
     return state.game
+  },
+  balance: state => {
+    if (state.game) return state.game.gold
+    return 0
+  },
+  over: state => {
+    return state.over
   }
 }
 export default {

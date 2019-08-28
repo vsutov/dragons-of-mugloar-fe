@@ -24,6 +24,27 @@ const actions = {
     } catch (error) {
       dispatch('messageHandler', { msg: error, success: false })
     }
+  },
+  purchaseItem: async ({ getters, commit, dispatch }, itemId) => {
+    try {
+      const game = getters.game
+        const response = await RepositoryFactory.get('shop').buy(
+        game.gameId,
+        itemId
+      )
+      if (response.status === 200 && response.data) {
+        const data = response.data
+        const stats = (({ shoppingSuccess, ...stats }) => ({ ...stats }))(data)
+        const msg = data.shoppingSuccess ? 'Shopping succeeded!' : 'Shopping failed!'
+        dispatch('fetchTasks')
+        dispatch('messageHandler', { msg: msg, success: data.shoppingSuccess })
+        commit('STATS_UPDATE', stats)
+      } else {
+        throw 'API call unsuccessful.'
+      }
+    } catch (error) {
+      dispatch('messageHandler', { msg: error, success: false })
+    }
   }
 }
 const getters = {

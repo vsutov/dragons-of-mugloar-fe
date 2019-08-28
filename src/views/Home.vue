@@ -2,38 +2,54 @@
   <div id="game-wrapper">
     <div class="game--New" v-if="!game">
       <img src="../assets/logo.png" alt="game-logo" />
-      <button class="button" @click="startGame">Start game</button>
+      <h1 v-if="over">Game over!</h1>
+      <button class="button" @click="startGame">{{over ? 'Start over' : 'New game'}}</button>
     </div>
     <div class="game" v-else>
       <stats :stats="normalizeStats" />
-      <tasks :tasks="tasks" />
+      <div class="text text--center" v-if="currMessage" :class="messageColor">{{ currMessage.msg }}</div>
+      <div class="game--body">
+        <tasks :tasks="tasks" />
+        <shop :shop="shop" :balance="balance" />
+    </div>
     </div>
   </div>
 </template>
 <script>
-import Stats from '@/components/_stats.vue'
-import Tasks from '@/components/_tasks.vue'
+import Stats from "@/components/_stats.vue";
+import Tasks from "@/components/_tasks.vue";
+import Shop from "@/components/_shop.vue";
 
 //vuex
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'game',
+  name: "game",
   components: {
     Stats,
-    Tasks 
+    Tasks,
+    Shop
   },
   computed: {
-    ...mapGetters(['game', 'tasks', 'shop']),
+    ...mapGetters(["game", "tasks", "shop", "balance", "messages", "over"]),
     normalizeStats() {
-      const stats = (({ gameId, ...stats }) => ({ ...stats }))(this.game)
-      return stats
+      const stats = (({ gameId, ...stats }) => ({ ...stats }))(this.game);
+      return stats;
+    },
+    currMessage() {
+      return this.messages.length > 0 ? this.messages[this.messages.length - 1] : undefined
+    },
+    messageColor(){
+      if(this.currMessage) {
+        if(this.currMessage.success) return 'text--green'
+        return 'text--red'
+      }
     }
   },
   methods: {
     startGame() {
-      this.$store.dispatch('initGame')
+      this.$store.dispatch("initGame");
     }
   }
-}
+};
 </script>

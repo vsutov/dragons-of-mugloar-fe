@@ -1,6 +1,5 @@
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
-
 const state = {
   tasks: []
 }
@@ -20,10 +19,16 @@ const actions = {
       if (response.status === 200 && response.data) {
         const data = response.data
         data.forEach(e => {
-          if(e.encrypted === 1){
-            console.log('base64')
+          // if base64
+          if (e.encrypted === 1) {
+            e.adId = atob(e.adId)
             e.message = atob(e.message)
             e.probability = atob(e.probability)
+            //if caesar shift ROT13
+          } else if (e.encrypted === 2) {
+            e.adid = caesarShift(e.adId)
+            e.message = caesarShift(e.message)
+            e.probability = caesarShift(e.probability)
           }
         })
         commit('TASKS_SET', response.data)
@@ -41,12 +46,16 @@ const actions = {
         game.gameId,
         taskId
       )
-      if (response.status === 200 && response.data) {
+      if (response.status === 200) {
         const data = response.data
         const stats = (({ success, message, ...stats }) => ({ ...stats }))(data)
         dispatch('fetchTasks')
         dispatch('messageHandler', { msg: data.message, success: data.success })
-        commit('STATS_UPDATE', stats)
+        if (stats.lives > 0) {
+          commit('STATS_UPDATE', stats)
+        } else {
+          commit('GAME_OVER')
+        }
       } else {
         throw 'API call unsuccessful.'
       }
@@ -65,4 +74,22 @@ export default {
   mutations,
   actions,
   getters
+}
+
+function caesarShift(str) {
+  let output = ''
+
+  for (let i = 0; i < str.length; i++) {
+    let c = str[i]
+
+    if (c.match(/[a-z]/i)) {
+      let code = str.charCodeAt(i)
+      if (code >= 65 && code <= 90)
+        c = String.fromCharCode(((code - 65 + 13) % 26) + 65)
+      else if (code >= 97 && code <= 122)
+        c = String.fromCharCode(((code - 97 + 13) % 26) + 97)
+    }
+    output += c
+  }
+  return output
 }
