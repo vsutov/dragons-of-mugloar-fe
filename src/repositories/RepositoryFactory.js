@@ -9,7 +9,7 @@ const repositories = {
   shop: ShopRepository
 }
 
-// Resolve correct repository
+// Function to resolve correct repository
 export const RepositoryFactory = {
   get: name => repositories[name]
 }

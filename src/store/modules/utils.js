@@ -13,6 +13,7 @@ const mutations = {
 
 const actions = {
   messageHandler: async ({ commit }, messageObj) => {
+    // Push a message to array, remove it after 5 seconds
     commit('ADD_MSG', messageObj),
       setTimeout(() => {
         commit('REMOVE_MSG')

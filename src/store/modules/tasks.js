@@ -18,6 +18,7 @@ const actions = {
       )
       if (response.status === 200 && response.data) {
         const data = response.data
+        // If messages received, check if any of them is encrypted
         data.forEach(e => {
           // if base64
           if (e.encrypted === 1) {
@@ -31,6 +32,7 @@ const actions = {
             e.probability = caesarShift(e.probability)
           }
         })
+        // Set received and decrypted tasks
         commit('TASKS_SET', response.data)
       } else {
         throw 'API call unsuccessful.'
@@ -48,7 +50,9 @@ const actions = {
       )
       if (response.status === 200) {
         const data = response.data
+        // Remove unneeded keys 'success' and 'message' for stats
         const stats = (({ success, message, ...stats }) => ({ ...stats }))(data)
+        // Re-fetch tasks with updated "expires in", update stats if has lives, else - end game
         dispatch('fetchTasks')
         dispatch('messageHandler', { msg: data.message, success: data.success })
         if (stats.lives > 0) {

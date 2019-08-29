@@ -5,7 +5,7 @@ export default {
   fetchTasks(gameId) {
     return Repository.get(`${gameId}/messages`)
   },
-  // Try to solve one of the message
+  // Try to solve one of the tasks
   solveTask(gameId, taskId) {
     return Repository.post(`${gameId}/solve/${taskId}`)
   }

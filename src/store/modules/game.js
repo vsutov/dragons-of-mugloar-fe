@@ -6,13 +6,16 @@ const state = {
 }
 
 const mutations = {
+  // Start new game
   GAME_SET(state, game) {
     state.game = game
     state.over = false
   },
+  // Update stats of player
   STATS_UPDATE(state, stats) {
     Object.assign(state.game, stats)
   },
+  // End game
   GAME_OVER(state) {
     state.game = null
     state.over = true
@@ -24,6 +27,7 @@ const actions = {
       const response = await RepositoryFactory.get('game').startGame()
       if (response.status === 200 && response.data) {
         commit('GAME_SET', response.data)
+        // After game started, fetch tasks and shop
         dispatch('fetchTasks')
         dispatch('fetchShop')
       } else {

@@ -5,6 +5,7 @@ const state = {
 }
 
 const mutations = {
+  // Set shop items
   SHOP_SET(state, shop) {
     state.shop = shop
   }
@@ -17,6 +18,7 @@ const actions = {
         game.gameId
       )
       if (response.status === 200 && response.data) {
+        // Set shop items in case of success
         commit('SHOP_SET', response.data)
       } else {
         throw 'API call unsuccessful.'
@@ -34,8 +36,11 @@ const actions = {
       )
       if (response.status === 200 && response.data) {
         const data = response.data
+        // Remove unneeded key "shoppingSuccess" for stats
         const stats = (({ shoppingSuccess, ...stats }) => ({ ...stats }))(data)
+        // Generate message
         const msg = data.shoppingSuccess ? 'Shopping succeeded!' : 'Shopping failed!'
+        // Re-fetch tasks with updated "expires in", update stats
         dispatch('fetchTasks')
         dispatch('messageHandler', { msg: msg, success: data.shoppingSuccess })
         commit('STATS_UPDATE', stats)
