@@ -11,7 +11,7 @@
       <div class="game--body">
         <tasks :tasks="tasks" />
         <shop :shop="shop" :balance="balance" />
-    </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,19 +37,27 @@ export default {
       return stats;
     },
     currMessage() {
-      return this.messages.length > 0 ? this.messages[this.messages.length - 1] : undefined
+      return this.messages.length > 0
+        ? this.messages[this.messages.length - 1]
+        : undefined;
     },
-    messageColor(){
-      if(this.currMessage) {
-        if(this.currMessage.success) return 'text--green'
-        return 'text--red'
+    messageColor() {
+      if (this.currMessage) {
+        if (this.currMessage.success) return "text--green";
+        return "text--red";
       }
     }
   },
   methods: {
     startGame() {
       this.$store.dispatch("initGame");
-    }
+    },
+    refreshHandler() {}
+  },
+  created() {
+    window.addEventListener("beforeunload", event => {
+      event.returnValue = `Are you sure you want to leave?`;
+    });
   }
 };
 </script>

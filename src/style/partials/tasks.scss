@@ -1,0 +1,27 @@
+#tasks-container {
+  width: 49%;
+}
+.tasks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: minmax(150px, auto);
+  grid-gap: 1em;
+
+  &--Item {
+    height: 250px;
+    cursor: pointer;
+    background: #81d4fa;
+    padding: 20px;
+    position: relative;
+
+    &--green {
+      background: #aed581;
+    }
+    &--yellow {
+      background: #ffee58;
+    }
+    &--red {
+      background: #ef9a9a;
+    }
+  }
+}

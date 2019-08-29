@@ -1,0 +1,37 @@
+.stats {
+    height: 40px;
+    background-color: #f6f6f6;
+    width: 97%;
+    font-weight: 600;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  
+    &--Item {
+      text-transform: capitalize;
+      display: block;
+  
+      &-lives {
+        color: red;
+      }
+  
+      &-gold {
+        color: orange;
+      }
+  
+      &-level {
+        color: midnightblue;
+      }
+  
+      &-score {
+        color: green;
+      }
+  
+      &-highScore,
+      &-turn {
+        color: black;
+      }
+    }
+  }
