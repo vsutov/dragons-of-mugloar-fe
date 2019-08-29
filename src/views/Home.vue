@@ -1,6 +1,6 @@
 <template>
   <div id="game-wrapper">
-    <div class="game--New" v-if="!game">
+    <div class="game game--New" v-if="!game">
       <img src="../assets/logo.png" alt="game-logo" />
       <h1 v-if="over">Game over!</h1>
       <button class="button" @click="startGame">{{over ? 'Start over' : 'New game'}}</button>
